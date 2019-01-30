@@ -1,6 +1,8 @@
 package top.ingxx.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 import top.ingxx.pojo.TbSpecification;
 import top.ingxx.pojo.TbSpecificationExample;
@@ -27,4 +29,10 @@ public interface TbSpecificationMapper {
     int updateByPrimaryKeySelective(TbSpecification record);
 
     int updateByPrimaryKey(TbSpecification record);
+
+    /**
+     * 获取规格下拉列表
+     * @return
+     */
+    List<Map> selectOptionList ();
 }

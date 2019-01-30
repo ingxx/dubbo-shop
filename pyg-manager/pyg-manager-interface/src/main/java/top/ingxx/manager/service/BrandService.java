@@ -5,6 +5,7 @@ import top.ingxx.untils.entity.PageResult;
 import top.ingxx.untils.entity.PygResult;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BrandService {
     /**
@@ -55,4 +56,10 @@ public interface BrandService {
      * @return
      */
     public PageResult findPage(TbBrand brand,Integer pageNum,Integer rows);
+
+    /**
+     * 获取品牌下拉列表
+     * @return
+     */
+    public List<Map> selectOptionList();
 }

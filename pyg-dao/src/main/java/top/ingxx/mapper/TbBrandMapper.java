@@ -1,6 +1,8 @@
 package top.ingxx.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 import top.ingxx.pojo.TbBrand;
 import top.ingxx.pojo.TbBrandExample;
@@ -27,4 +29,10 @@ public interface TbBrandMapper {
     int updateByPrimaryKeySelective(TbBrand record);
 
     int updateByPrimaryKey(TbBrand record);
+
+    /**
+     * 获取品牌下拉列表
+     * @return
+     */
+    List<Map> selectOptionList();
 }

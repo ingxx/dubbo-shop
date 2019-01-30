@@ -1,6 +1,7 @@
 package top.ingxx.manager.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -121,4 +122,12 @@ public class SpecificationController {
         return specificationService.findPage(specification, page, rows);
     }
 
+    /**
+     * 获取规格下拉列表
+     * @return
+     */
+    @RequestMapping("/selectOptionList")
+    public List<Map> selectOptionList(){
+        return specificationService.selectOptionList();
+    }
 }

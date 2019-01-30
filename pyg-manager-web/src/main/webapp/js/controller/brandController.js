@@ -63,5 +63,5 @@ app.controller('brandController', function ($scope, $http, $controller, brandSer
                 $scope.paginationConf.totalItems = data.total;//更新总记录数
             }
         )
-    }
+    };
 })

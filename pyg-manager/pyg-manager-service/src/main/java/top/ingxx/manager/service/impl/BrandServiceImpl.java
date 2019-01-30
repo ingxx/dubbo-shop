@@ -13,6 +13,7 @@ import top.ingxx.untils.entity.PageResult;
 import top.ingxx.untils.entity.PygResult;
 
 import java.util.List;
+import java.util.Map;
 
 import top.ingxx.pojo.TbBrandExample.Criteria;
 
@@ -73,5 +74,10 @@ public class BrandServiceImpl implements BrandService {
         }
         Page<TbBrand> page = (Page<TbBrand>) brandMapper.selectByExample(example);
         return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    @Override
+    public List<Map> selectOptionList() {
+        return brandMapper.selectOptionList();
     }
 }

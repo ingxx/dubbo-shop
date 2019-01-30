@@ -1,5 +1,7 @@
 package top.ingxx.manager.controller;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -108,6 +110,9 @@ public class TypeTemplateController {
 	 */
 	@RequestMapping("/search")
 	public PageResult search(@RequestBody TbTypeTemplate typeTemplate, int page, int rows  ){
+		Map map = new HashMap<String,String>();
+		map.put("id","123");
+		map.put("text","123");
 		return typeTemplateService.findPage(typeTemplate, page, rows);		
 	}
 	

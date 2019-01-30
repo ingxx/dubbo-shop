@@ -10,6 +10,7 @@ import top.ingxx.untils.entity.PageResult;
 import top.ingxx.untils.entity.PygResult;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/brand")
@@ -72,9 +73,25 @@ public class BrandController {
         }
     }
 
+    /**
+     * 条件分页搜索
+     * @param brand
+     * @param page
+     * @param rows
+     * @return
+     */
     @RequestMapping("/search")
     public PageResult search(@RequestBody TbBrand brand,Integer page, Integer rows){
         PageResult result = brandService.findPage(brand, page, rows);
         return result;
+    }
+
+    /**
+     * 获取品牌下拉列表
+     * @return
+     */
+    @RequestMapping("/selectOptionList")
+    public List<Map> selectOptionList(){
+        return brandService.selectOptionList();
     }
 }

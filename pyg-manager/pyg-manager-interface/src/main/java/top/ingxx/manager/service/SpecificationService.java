@@ -1,5 +1,7 @@
 package top.ingxx.manager.service;
 import java.util.List;
+import java.util.Map;
+
 import top.ingxx.pojo.TbSpecification;
 
 import top.ingxx.pojoGroup.Specification;
@@ -58,5 +60,10 @@ public interface SpecificationService {
 	 * @return
 	 */
 	public PageResult findPage(TbSpecification specification, int pageNum, int pageSize);
-	
+
+	/**
+	 * 获取规格下拉列表
+	 * @return
+	 */
+	public List<Map> selectOptionList();
 }
