@@ -27,6 +27,9 @@ app.controller('typeTemplateController', function ($scope, $controller, typeTemp
         typeTemplateService.findOne(id).success(
             function (response) {
                 $scope.entity = response;
+                $scope.entity.brandIds = JSON.parse(response.brandIds);
+                $scope.entity.specIds = JSON.parse(response.specIds);
+                $scope.entity.customAttributeItems = JSON.parse(response.customAttributeItems);
             }
         );
     }
@@ -90,15 +93,25 @@ app.controller('typeTemplateController', function ($scope, $controller, typeTemp
     $scope.findSpecList = function () {
         specificationService.selectOptionList().success(
             function (data) {
-                $scope.specList = {data:data};
+                $scope.specList = {data: data};
             }
         )
     };
 
-    $scope.addTableRow =function () {
+    $scope.addTableRow = function () {
         $scope.entity.customAttributeItems.push({});
     }
-    $scope.deleteTableRow =function (index) {
-        $scope.entity.customAttributeItems.splice(index,1);
+    $scope.deleteTableRow = function (index) {
+        $scope.entity.customAttributeItems.splice(index, 1);
+    }
+    //优化显示
+    $scope.jsonToString = function (jsonStr, key) {
+        var json = JSON.parse(jsonStr);
+        var str = "";
+        for (var i = 0; i < json.length; i++) {
+            str += json[i][key]+",";
+        }
+        str = str.substring(0, str.length-1);
+        return str;
     }
 });
