@@ -7,7 +7,10 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Specification implements Serializable {
+    //规格
     private TbSpecification specification;
+    //规格参数
+    private List<TbSpecificationOption> specificationOptionList;
 
     public List<TbSpecificationOption> getSpecificationOptionList() {
         return specificationOptionList;
@@ -16,8 +19,6 @@ public class Specification implements Serializable {
     public void setSpecificationOptionList(List<TbSpecificationOption> specificationOptionList) {
         this.specificationOptionList = specificationOptionList;
     }
-
-    private List<TbSpecificationOption> specificationOptionList;
 
     public TbSpecification getSpecification() {
         return specification;
