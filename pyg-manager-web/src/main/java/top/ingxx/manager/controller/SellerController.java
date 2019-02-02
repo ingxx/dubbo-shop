@@ -1,6 +1,11 @@
 package top.ingxx.manager.controller;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 
+
+import org.apache.log4j.Logger;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +23,7 @@ import top.ingxx.untils.entity.PygResult;
 @RestController
 @RequestMapping("/seller")
 public class SellerController {
-
+  	Logger logger = Logger.getLogger(this.getClass());
 	@Reference
 	private SellerService sellerService;
 	
@@ -79,7 +84,9 @@ public class SellerController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
-	public TbSeller findOne(String id){
+	public TbSeller findOne(String id) throws UnsupportedEncodingException {
+		id = new String(id.getBytes("ISO-8859-1"),"UTF-8");
+		logger.info(id);
 		return sellerService.findOne(id);		
 	}
 	
@@ -110,5 +117,20 @@ public class SellerController {
 	public PageResult search(@RequestBody TbSeller seller, int page, int rows  ){
 		return sellerService.findPage(seller, page, rows);		
 	}
-	
+
+    /**
+     * 修改商家审核状态
+     * @param map
+     * @return
+     */
+	@RequestMapping("updateStatus")
+	public PygResult updateStatus(@RequestBody Map<String,String>map){
+        try {
+            sellerService.updateStatus(map.get("sellerId"),map.get("status"));
+            return new PygResult(true,"修改成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new PygResult(false,"修改失败");
+        }
+    }
 }

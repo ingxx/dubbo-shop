@@ -1,6 +1,7 @@
 package top.ingxx.shop.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,7 +51,10 @@ public class SellerController {
 	@RequestMapping("/add")
 	public PygResult add(@RequestBody TbSeller seller){
 		try {
-			sellerService.add(seller);
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String password = passwordEncoder.encode(seller.getPassword());
+            seller.setPassword(password);
+            sellerService.add(seller);
 			return new PygResult(true, "增加成功");
 		} catch (Exception e) {
 			e.printStackTrace();
