@@ -1,9 +1,10 @@
 package top.ingxx.pojo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class TbItem {
+public class TbItem implements Serializable {
     private Long id;
 
     private String title;

@@ -1,10 +1,12 @@
 package top.ingxx.manager.service;
 import java.util.List;
+
+import top.ingxx.pojo.TbItem;
 import top.ingxx.pojo.TbItemCat;
 
 import top.ingxx.untils.entity.PageResult;
 /**
- * 服务层接口
+ * 商品分类服务层接口
  * @author Administrator
  *
  */
@@ -57,5 +59,12 @@ public interface ItemCatService {
 	 * @return
 	 */
 	public PageResult findPage(TbItemCat itemCat, int pageNum, int pageSize);
-	
+
+
+	/**
+	 * 根据父分类查询分类
+	 * @param parentId
+	 * @return
+	 */
+	public List<TbItemCat> findByParentId(Long parentId);
 }

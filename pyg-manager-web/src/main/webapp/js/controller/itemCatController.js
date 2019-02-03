@@ -33,7 +33,8 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 	
 	//保存 
 	$scope.save=function(){				
-		var serviceObject;//服务层对象  				
+		var serviceObject;//服务层对象
+		$scope.entity.parentId = $scope.parentId;
 		if($scope.entity.id!=null){//如果有ID
 			serviceObject=itemCatService.update( $scope.entity ); //修改  
 		}else{
@@ -43,7 +44,7 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 			function(response){
 				if(response.success){
 					//重新查询 
-		        	$scope.reloadList();//重新加载
+		        	$scope.findByParentId($scope.parentId);//重新加载
 				}else{
 					alert(response.message);
 				}
@@ -75,6 +76,32 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
-	}
+	};
+    $scope.parentId = 0;
+	//根据上层ID查列表
+	$scope.findByParentId = function (parentId) {
+		$scope.parentId = parentId;
+		itemCatService.findByParentId(parentId).success(
+			function (data) {
+				$scope.list = data;
+            }
+		)
+    }
+    $scope.grade = 1;
+	$scope.setGrade = function (val) {
+		$scope.grade = val;
+    }
+    $scope.selectList = function (p_entity) {
+		if($scope.grade == 1){
+			$scope.entity_1 = null;
+            $scope.entity_2 = null;
+		}else if($scope.grade == 2){
+            $scope.entity_1 = p_entity;
+            $scope.entity_2 = null;
+		}else if($scope.grade == 3){
+            $scope.entity_2 = p_entity;
+		}
+		$scope.findByParentId(p_entity.id)
+    }
     
 });	

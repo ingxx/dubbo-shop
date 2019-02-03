@@ -5,6 +5,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import top.ingxx.mapper.TbItemCatMapper;
+import top.ingxx.pojo.TbItem;
 import top.ingxx.pojo.TbItemCat;
 import top.ingxx.pojo.TbItemCatExample;
 import top.ingxx.pojo.TbItemCatExample.Criteria;
@@ -96,5 +97,14 @@ public class ItemCatServiceImpl implements ItemCatService {
 		Page<TbItemCat> page= (Page<TbItemCat>)itemCatMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
-	
+
+	@Override
+	public List<TbItemCat> findByParentId(Long parentId) {
+		TbItemCatExample example = new TbItemCatExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andParentIdEqualTo(parentId);
+        List<TbItemCat> list = itemCatMapper.selectByExample(example);
+        return list;
+    }
+
 }
