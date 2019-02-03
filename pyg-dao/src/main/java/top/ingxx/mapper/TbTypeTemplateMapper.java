@@ -1,6 +1,8 @@
 package top.ingxx.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 import top.ingxx.pojo.TbTypeTemplate;
 import top.ingxx.pojo.TbTypeTemplateExample;
@@ -27,4 +29,6 @@ public interface TbTypeTemplateMapper {
     int updateByPrimaryKeySelective(TbTypeTemplate record);
 
     int updateByPrimaryKey(TbTypeTemplate record);
+
+    List<Map> selectOptionList();
 }

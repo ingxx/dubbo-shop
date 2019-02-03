@@ -1,5 +1,7 @@
 package top.ingxx.manager.service;
 import java.util.List;
+import java.util.Map;
+
 import top.ingxx.pojo.TbTypeTemplate;
 
 import top.ingxx.untils.entity.PageResult;
@@ -57,5 +59,10 @@ public interface TypeTemplateService {
 	 * @return
 	 */
 	public PageResult findPage(TbTypeTemplate typeTemplate, int pageNum, int pageSize);
-	
+
+	/**
+	 * 获取类型模板下拉列表
+	 * @return
+	 */
+	public List<Map> selectOptionList();
 }

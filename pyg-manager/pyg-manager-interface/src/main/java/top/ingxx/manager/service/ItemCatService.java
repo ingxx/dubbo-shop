@@ -1,5 +1,6 @@
 package top.ingxx.manager.service;
 import java.util.List;
+import java.util.Map;
 
 import top.ingxx.pojo.TbItem;
 import top.ingxx.pojo.TbItemCat;
@@ -50,7 +51,7 @@ public interface ItemCatService {
 	 * 批量删除
 	 * @param ids
 	 */
-	public void delete(Long[] ids);
+	public void delete(Long[] ids) throws Exception;
 
 	/**
 	 * 分页
@@ -67,4 +68,6 @@ public interface ItemCatService {
 	 * @return
 	 */
 	public List<TbItemCat> findByParentId(Long parentId);
+
+
 }

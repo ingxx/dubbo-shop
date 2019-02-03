@@ -1,5 +1,5 @@
  //控制层 
-app.controller('itemCatController' ,function($scope,$controller   ,itemCatService){	
+app.controller('itemCatController' ,function($scope,$controller,itemCatService,typeTemplateService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -26,7 +26,7 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 	$scope.findOne=function(id){				
 		itemCatService.findOne(id).success(
 			function(response){
-				$scope.entity= response;					
+				$scope.entity= response;
 			}
 		);				
 	}
@@ -34,6 +34,7 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 	//保存 
 	$scope.save=function(){				
 		var serviceObject;//服务层对象
+		$scope.entity.typeId=$scope.typeEntity.id;
 		$scope.entity.parentId = $scope.parentId;
 		if($scope.entity.id!=null){//如果有ID
 			serviceObject=itemCatService.update( $scope.entity ); //修改  
@@ -58,10 +59,12 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 		//获取选中的复选框			
 		itemCatService.dele( $scope.selectIds ).success(
 			function(response){
-				if(response.success){
-					$scope.reloadList();//刷新列表
-					$scope.selectIds=[];
-				}						
+				if(response.success) {
+                    $scope.findByParentId($scope.parentId);//刷新列表
+                }else{
+					alert("删除失败");
+				}
+                $scope.selectIds = [];
 			}		
 		);				
 	}
@@ -103,5 +106,13 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 		}
 		$scope.findByParentId(p_entity.id)
     }
-    
+
+    $scope.typeList = {data: []};
+    $scope.selectOptionList=function () {
+		typeTemplateService.selectOptionList().success(
+			function (data) {
+				$scope.typeList = {data:data};
+            }
+		)
+    }
 });	

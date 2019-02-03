@@ -115,5 +115,9 @@ public class TypeTemplateController {
 		map.put("text","123");
 		return typeTemplateService.findPage(typeTemplate, page, rows);		
 	}
-	
+
+	@RequestMapping("/selectOptionList")
+	public List<Map> selectOptionList(){
+		return typeTemplateService.selectOptionList();
+	}
 }
