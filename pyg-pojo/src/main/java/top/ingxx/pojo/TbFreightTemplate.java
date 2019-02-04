@@ -1,8 +1,9 @@
 package top.ingxx.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TbFreightTemplate {
+public class TbFreightTemplate implements Serializable {
     private Long id;
 
     private String sellerId;

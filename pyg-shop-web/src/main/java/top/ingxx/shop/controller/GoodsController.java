@@ -1,11 +1,13 @@
 package top.ingxx.shop.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.ingxx.manager.service.GoodsService;
 import top.ingxx.pojo.TbGoods;
+import top.ingxx.pojoGroup.Goods;
 import top.ingxx.untils.entity.PageResult;
 import top.ingxx.untils.entity.PygResult;
 
@@ -48,8 +50,10 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/add")
-	public PygResult add(@RequestBody TbGoods goods){
-		try {
+	public PygResult add(@RequestBody Goods goods){
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        goods.getGoods().setSellerId(sellerId);
+        try {
 			goodsService.add(goods);
 			return new PygResult(true, "增加成功");
 		} catch (Exception e) {

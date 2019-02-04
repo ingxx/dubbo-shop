@@ -2,6 +2,7 @@ package top.ingxx.manager.service;
 import java.util.List;
 import top.ingxx.pojo.TbGoods;
 
+import top.ingxx.pojoGroup.Goods;
 import top.ingxx.untils.entity.PageResult;
 /**
  * 服务层接口
@@ -27,7 +28,7 @@ public interface GoodsService {
 	/**
 	 * 增加
 	*/
-	public void add(TbGoods goods);
+	public void add(Goods goods);
 	
 	
 	/**

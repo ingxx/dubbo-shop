@@ -1,8 +1,9 @@
 package top.ingxx.pojo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class TbOrderItem {
+public class TbOrderItem implements Serializable {
     private Long id;
 
     private Long itemId;

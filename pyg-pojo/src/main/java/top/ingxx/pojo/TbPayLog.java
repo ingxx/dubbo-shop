@@ -1,8 +1,9 @@
 package top.ingxx.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TbPayLog {
+public class TbPayLog implements Serializable {
     private String outTradeNo;
 
     private Date createTime;
