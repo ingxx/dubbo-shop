@@ -176,12 +176,12 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
                 if ($event.target.checked) {
                     //选中push value到attributeValue集合
                     obj.attributeValue.push(value);
-                }else{
+                } else {
                     //取消 删除attributeValue中的value值
-                    obj.attributeValue.splice(obj.attributeValue.indexOf(value),1);
+                    obj.attributeValue.splice(obj.attributeValue.indexOf(value), 1);
                     //如果attributeValue为空了 从specificationItems移除当前规格
-                    if(obj.attributeValue.length ==0){
-                        $scope.entity.goodsDesc.specificationItems.splice($scope.entity.goodsDesc.specificationItems.indexOf(obj),1);
+                    if (obj.attributeValue.length == 0) {
+                        $scope.entity.goodsDesc.specificationItems.splice($scope.entity.goodsDesc.specificationItems.indexOf(obj), 1);
                     }
                 }
             } else {
@@ -191,8 +191,24 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
     });
     //创建sku列表
     $scope.createItemList = function () {
-        $scope.entity.itemList = [{spec:{},price:0,num:99999,status:'0',isDefault:'0'}];//列表初始化
+        $scope.entity.itemList = [{spec: {}, price: 0, num: 99999, status: '0', isDefault: '0'}];//列表初始化
+        var items = $scope.entity.goodsDesc.specificationItems;
+        for (var i = 0; i < items.length; i++) {
+            $scope.entity.itemList = addColumn($scope.entity.itemList, items[i].attributeName, items[i].attributeValue);
+        }
+    }
 
+    addColumn = function (list, columnName, columnValues) {
+        var newList = [];
+        for (var i = 0; i < list.length; i++) {
+            var oldRow = list[i];
+            for (var j = 0; j < columnValues.length; j++) {
+                var newRow = JSON.parse(JSON.stringify(oldRow)); //深克隆
+                newRow.spec[columnName] = columnValues[j];
+                newList.push(newRow);
+            }
+        }
+        return newList;
     }
 
 });	
