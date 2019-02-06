@@ -1,4 +1,4 @@
-app.controller("baseController",function ($scope) {
+app.controller("baseController", function ($scope) {
     //重新加载列表 数据
     $scope.reloadList = function () {
         //切换页码
@@ -24,4 +24,13 @@ app.controller("baseController",function ($scope) {
             $scope.selectIds.splice(index, 1);
         }
     };
+    //在list集合中查找KEY的值
+    $scope.searchObjectByKey = function (list, key, keyValue) {
+        for (var i = 0; i < list.length; i++) {
+            if(list[i][key] == keyValue){
+                return list[i];
+            }
+        }
+        return null;
+    }
 })
