@@ -66,6 +66,11 @@ public class GoodsServiceImpl implements GoodsService {
         goodsMapper.insert(goods.getGoods()); //插入商品基本信息
         goods.getGoodsDesc().setGoodsId(goods.getGoods().getId()); //设置商品id（SPU）
         goodsDescMapper.insert(goods.getGoodsDesc()); //插入商品扩展表
+        saveItemList(goods); //插入sku
+    }
+
+    //插入sku列表
+    private void saveItemList(Goods goods){
         if ("1".equals(goods.getGoods().getIsEnableSpec())) {
             for (TbItem item : goods.getItemList()) {
                 //构建标题
@@ -122,8 +127,18 @@ public class GoodsServiceImpl implements GoodsService {
      * 修改
      */
     @Override
-    public void update(TbGoods goods) {
-        goodsMapper.updateByPrimaryKey(goods);
+    public void update(Goods goods) {
+        //更新基本表数据
+        goodsMapper.updateByPrimaryKey(goods.getGoods());
+        //更新扩展表
+        goodsDescMapper.updateByPrimaryKey(goods.getGoodsDesc());
+        //更新sku表
+        //删除原有的sku
+        TbItemExample example = new TbItemExample();
+        example.createCriteria().andGoodsIdEqualTo(goods.getGoods().getId());
+        itemMapper.deleteByExample(example);
+        //新增新sku
+        saveItemList(goods);
     }
 
     /**
@@ -142,6 +157,12 @@ public class GoodsServiceImpl implements GoodsService {
         TbGoodsDesc tbGoodsDesc = goodsDescMapper.selectByPrimaryKey(id);
         goods.setGoodsDesc(tbGoodsDesc);
 
+        //读取sku
+        TbItemExample example = new TbItemExample();
+        TbItemExample.Criteria criteria = example.createCriteria();
+        criteria.andGoodsIdEqualTo(id);
+        List<TbItem> list = itemMapper.selectByExample(example);
+        goods.setItemList(list);
         return goods;
     }
 

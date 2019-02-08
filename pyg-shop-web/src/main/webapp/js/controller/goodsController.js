@@ -1,5 +1,5 @@
 //控制层
-app.controller('goodsController', function ($scope, $controller, goodsService, uploadService, itemCatService, typeTemplateService) {
+app.controller('goodsController', function ($scope, $controller, $location, goodsService, uploadService, itemCatService, typeTemplateService) {
 
     $controller('baseController', {$scope: $scope});//继承
 
@@ -23,18 +23,35 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
     }
 
     //查询实体
-    $scope.findOne = function (id) {
+    $scope.findOne = function () {
+        var id = $location.search()['id'];
+        if (id == null) {
+            return;
+        }
         goodsService.findOne(id).success(
             function (response) {
                 $scope.entity = response;
+                //描述
+                editor.html(response.goodsDesc.introduction);
+                //图片列表
+                $scope.entity.goodsDesc.itemImages = JSON.parse($scope.entity.goodsDesc.itemImages);
+                //扩展属性
+                $scope.entity.goodsDesc.customAttributeItems = JSON.parse($scope.entity.goodsDesc.customAttributeItems);
+                //规格
+                $scope.entity.goodsDesc.specificationItems = JSON.parse($scope.entity.goodsDesc.specificationItems);
+                //sku列表
+                for(var i = 0; i < $scope.entity.itemList.length ;i++){
+                    $scope.entity.itemList[i].spec = JSON.parse($scope.entity.itemList[i].spec);
+                }
             }
         );
     }
 
     //保存
     $scope.save = function () {
+        $scope.entity.goodsDesc.introduction = editor.html();
         var serviceObject;//服务层对象
-        if ($scope.entity.id != null) {//如果有ID
+        if ($scope.entity.goods.id != null) {//如果有ID
             serviceObject = goodsService.update($scope.entity); //修改
         } else {
             serviceObject = goodsService.add($scope.entity);//增加
@@ -42,29 +59,14 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
         serviceObject.success(
             function (response) {
                 if (response.success) {
-                    //重新查询
-                    $scope.reloadList();//重新加载
+                    alert("保存成功！");
+                    location.href = 'goods.html'
                 } else {
                     alert(response.message);
                 }
             }
         );
     };
-    //增加商品
-    $scope.add = function () {
-        $scope.entity.goodsDesc.introduction = editor.html();
-        goodsService.add($scope.entity).success(
-            function (response) {
-                if (response.success) {
-                    alert("新增成功！");
-                    editor.html("");//清空富文本编辑器
-                    $scope.entity = {};
-                } else {
-                    alert(response.message);
-                }
-            }
-        );
-    }
 
 
     //批量删除
@@ -156,7 +158,9 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
                 //品牌列表
                 $scope.typeTemplate.brandIds = JSON.parse($scope.typeTemplate.brandIds);
                 //扩展属性
-                $scope.entity.goodsDesc.customAttributeItems = JSON.parse($scope.typeTemplate.customAttributeItems);
+                if ($location.search()['id'] == null) { //如果是增加商品
+                    $scope.entity.goodsDesc.customAttributeItems = JSON.parse($scope.typeTemplate.customAttributeItems);
+                }
             }
         );
         //读取规格
@@ -225,5 +229,18 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
             }
         )
     }
-
+    $scope.checkedAttributeValue = function (specName, optionName) {
+        var item = $scope.entity.goodsDesc.specificationItems;
+        var obj = $scope.searchObjectByKey(item, 'attributeName', specName);
+        if (obj != null) {
+            //如果选项在列表中
+            if (obj.attributeValue.indexOf(optionName) >= 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 });	

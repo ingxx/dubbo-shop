@@ -8,6 +8,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import top.ingxx.pojo.TbGoods;
 import top.ingxx.manager.service.GoodsService;
 
+import top.ingxx.pojoGroup.Goods;
 import top.ingxx.untils.entity.PageResult;
 import top.ingxx.untils.entity.PygResult;
 /**
@@ -63,7 +64,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public PygResult update(@RequestBody TbGoods goods){
+	public PygResult update(@RequestBody Goods goods){
 		try {
 			goodsService.update(goods);
 			return new PygResult(true, "修改成功");
@@ -79,7 +80,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
-	public TbGoods findOne(Long id){
+	public Goods findOne(Long id){
 		return goodsService.findOne(id);		
 	}
 	

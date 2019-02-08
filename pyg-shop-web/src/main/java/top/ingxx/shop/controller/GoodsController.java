@@ -68,8 +68,14 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public PygResult update(@RequestBody TbGoods goods){
-		try {
+	public PygResult update(@RequestBody Goods goods){
+	    //判断操作的商品和数据库中商家是否一样  判断操作商品和当前登录用户是否一样
+        Goods one = goodsService.findOne(goods.getGoods().getId());
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(!one.getGoods().getSellerId().equals(sellerId) || !goods.getGoods().getSellerId().equals(sellerId)){
+            return new PygResult(false,"非法操作");
+        }
+        try {
 			goodsService.update(goods);
 			return new PygResult(true, "修改成功");
 		} catch (Exception e) {
@@ -84,7 +90,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
-	public TbGoods findOne(Long id){
+	public Goods findOne(Long id){
 		return goodsService.findOne(id);		
 	}
 	
