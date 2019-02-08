@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.springframework.transaction.annotation.Transactional;
 import top.ingxx.mapper.TbSpecificationOptionMapper;
 import top.ingxx.mapper.TbTypeTemplateMapper;
 import top.ingxx.pojo.TbSpecificationOption;
@@ -25,6 +26,7 @@ import top.ingxx.untils.entity.PageResult;
  * @author Administrator
  */
 @Service
+@Transactional
 public class TypeTemplateServiceImpl implements TypeTemplateService {
 
     @Autowired

@@ -5,6 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import top.ingxx.manager.service.BrandService;
 import top.ingxx.mapper.TbBrandMapper;
 import top.ingxx.pojo.TbBrand;
@@ -18,6 +19,7 @@ import java.util.Map;
 import top.ingxx.pojo.TbBrandExample.Criteria;
 
 @Service
+@Transactional
 public class BrandServiceImpl implements BrandService {
 
     @Autowired

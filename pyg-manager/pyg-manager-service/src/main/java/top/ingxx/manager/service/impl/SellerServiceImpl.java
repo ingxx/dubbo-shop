@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.springframework.transaction.annotation.Transactional;
 import top.ingxx.mapper.TbSellerMapper;
 import top.ingxx.pojo.TbSeller;
 import top.ingxx.pojo.TbSellerExample;
@@ -21,6 +22,7 @@ import top.ingxx.untils.entity.PageResult;
  * @author Administrator
  */
 @Service
+@Transactional
 public class SellerServiceImpl implements SellerService {
 
     @Autowired
