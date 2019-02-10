@@ -19,6 +19,7 @@ import java.util.Map;
 import top.ingxx.pojo.TbBrandExample.Criteria;
 
 @Service
+@Transactional
 public class BrandServiceImpl implements BrandService {
 
     @Autowired
