@@ -24,7 +24,6 @@ import top.ingxx.untils.entity.PageResult;
  * @author Administrator
  */
 @Service
-@Transactional
 public class ItemCatServiceImpl implements ItemCatService {
 
     @Autowired

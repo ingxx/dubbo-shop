@@ -26,7 +26,6 @@ import top.ingxx.untils.entity.PageResult;
  * @author Administrator
  */
 @Service
-@Transactional
 public class SpecificationServiceImpl implements SpecificationService {
 
     @Autowired

@@ -22,7 +22,6 @@ import top.ingxx.untils.entity.PageResult;
  * @author Administrator
  */
 @Service
-@Transactional
 public class SellerServiceImpl implements SellerService {
 
     @Autowired

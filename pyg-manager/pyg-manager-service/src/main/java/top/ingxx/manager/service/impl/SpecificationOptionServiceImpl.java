@@ -19,7 +19,6 @@ import top.ingxx.untils.entity.PageResult;
  *
  */
 @Service
-@Transactional
 public class SpecificationOptionServiceImpl implements SpecificationOptionService {
 
 	@Autowired
