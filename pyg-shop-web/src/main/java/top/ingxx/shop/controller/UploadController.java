@@ -18,7 +18,7 @@ public class UploadController {
         String filename = file.getOriginalFilename();
         String extName = filename.substring(filename.lastIndexOf(".") + 1);//获得扩展名
         try {
-            FastDFSClient client = new FastDFSClient("classpath:config/fdfs_client.conf");
+            FastDFSClient client = new FastDFSClient("classpath:config/fdfs_client.config");
             String fileId = client.uploadFile(file.getBytes(), extName);
             String url = file_server_url + fileId;//图片完整地址
             return new PygResult(true,url);
