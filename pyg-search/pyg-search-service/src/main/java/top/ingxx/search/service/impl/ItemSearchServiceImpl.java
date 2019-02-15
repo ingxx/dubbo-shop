@@ -86,10 +86,17 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         //查询商品分类
         List<String> categoryList = searchCategoryList(searchMap);
         map.put("categoryList", categoryList);
-        if (categoryList.size() > 0) {
-            //查询品牌和规格列表
-            Map brandAndSpecList = searchBrandAndSpecList(categoryList.get(0));
+
+        String category = (String) searchMap.get("category");
+        if (!"".equals(category)) {
+            Map brandAndSpecList = searchBrandAndSpecList(category);
             map.putAll(brandAndSpecList);
+        } else {
+            if (categoryList.size() > 0) {
+                //查询品牌和规格列表
+                Map brandAndSpecList = searchBrandAndSpecList(categoryList.get(0));
+                map.putAll(brandAndSpecList);
+            }
         }
         return map;
     }
@@ -109,12 +116,30 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         query.addCriteria(criteria);
 
         //分类过滤
-        if(!"".equals(searchMap.get("category"))) {
+        if (!"".equals(searchMap.get("category"))) {
             FilterQuery filterQuery = new SimpleFilterQuery();
             Criteria filterCriteria = new Criteria("item_category").is(searchMap.get("category"));
             filterQuery.addCriteria(filterCriteria);
             query.addFilterQuery(filterQuery);
         }
+        //品牌过滤
+        if (!"".equals(searchMap.get("brand"))) {
+            FilterQuery filterQuery = new SimpleFilterQuery();
+            Criteria filterCriteria = new Criteria("item_brand").is(searchMap.get("brand"));
+            filterQuery.addCriteria(filterCriteria);
+            query.addFilterQuery(filterQuery);
+        }
+        //规格过滤
+        if (searchMap.get("spec") != null) {
+            Map<String, String> specMap = (Map<String, String>) searchMap.get("spec");
+            for (String key : specMap.keySet()) {
+                FilterQuery filterQuery = new SimpleFilterQuery();
+                Criteria filterCriteria = new Criteria("item_spec_" + key).is(specMap.get(key));
+                filterQuery.addCriteria(filterCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+        }
+
         //构建高亮选项对象
         HighlightOptions highlightOptions = new HighlightOptions().addField("item_title");//高亮域
         highlightOptions.setSimplePrefix("<em style='color:red'>"); //前缀
