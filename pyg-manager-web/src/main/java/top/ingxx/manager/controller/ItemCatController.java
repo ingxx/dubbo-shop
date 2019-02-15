@@ -20,7 +20,7 @@ import top.ingxx.untils.entity.PygResult;
 @RequestMapping("/itemCat")
 public class ItemCatController {
 
-	@Reference
+	@Reference(timeout = 10000)
 	private ItemCatService itemCatService;
 	
 	/**

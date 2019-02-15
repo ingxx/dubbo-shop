@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import top.ingxx.mapper.TbSpecificationOptionMapper;
 import top.ingxx.mapper.TbTypeTemplateMapper;
@@ -20,6 +21,8 @@ import top.ingxx.manager.service.TypeTemplateService;
 
 import top.ingxx.untils.entity.PageResult;
 
+import javax.xml.transform.Templates;
+
 /**
  * 服务实现层
  *
@@ -31,9 +34,12 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
     @Autowired
     private TbTypeTemplateMapper typeTemplateMapper;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Autowired
     private TbSpecificationOptionMapper specificationOptionMapper;
+
     /**
      * 查询全部
      */
@@ -112,10 +118,27 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
                 criteria.andCustomAttributeItemsLike("%" + typeTemplate.getCustomAttributeItems() + "%");
             }
 
+
+        }
+        Page<TbTypeTemplate> page = (Page<TbTypeTemplate>) typeTemplateMapper.selectByExample(example);
+        saveToRedis();
+        return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    /**
+     * 将品牌列表和规格列表放入缓存
+     */
+    private void saveToRedis() {
+        List<TbTypeTemplate> typeTemplateList = findAll();
+        for (TbTypeTemplate typeTemplate : typeTemplateList) {
+            //得到品牌列表
+            List<Map> brandList = JSON.parseArray(typeTemplate.getBrandIds(), Map.class);
+            redisTemplate.boundHashOps("brandList").put(typeTemplate.getId(), brandList);
+            //得到规格列表
+            List<Map> specList = findSpecList(typeTemplate.getId());
+            redisTemplate.boundHashOps("specList").put(typeTemplate.getId(),specList);
         }
 
-        Page<TbTypeTemplate> page = (Page<TbTypeTemplate>) typeTemplateMapper.selectByExample(example);
-        return new PageResult(page.getTotal(), page.getResult());
     }
 
     /**
@@ -140,10 +163,10 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
             //根据ID找模板选项
             TbSpecificationOptionExample example = new TbSpecificationOptionExample();
             TbSpecificationOptionExample.Criteria criteria = example.createCriteria();
-            criteria.andSpecIdEqualTo(new Long((Integer)map.get("id")));
+            criteria.andSpecIdEqualTo(new Long((Integer) map.get("id")));
             List<TbSpecificationOption> options = specificationOptionMapper.selectByExample(example);
             //添加到map中 此时 list<map> 数据为[id:33,text:"屏幕尺寸",option:[{id:xx,optionName:xx,specId:xx,orders:x}]]
-            map.put("options",options);
+            map.put("options", options);
         }
         return list;
     }

@@ -1,6 +1,7 @@
 package top.ingxx.search.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/itemsearch")
 public class ItemSearchController {
+
+
 
     @Reference(timeout = 5000)
     private ItemSearchService itemSearchService;
