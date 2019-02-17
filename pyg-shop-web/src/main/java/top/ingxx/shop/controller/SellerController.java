@@ -29,10 +29,10 @@ public class SellerController {
      *
      * @return
      */
-    @RequestMapping("/findAll")
-    public List<TbSeller> findAll() {
-        return sellerService.findAll();
-    }
+//    @RequestMapping("/findAll")
+//    public List<TbSeller> findAll() {
+//        return sellerService.findAll();
+//    }
 
 
     /**
@@ -40,10 +40,10 @@ public class SellerController {
      *
      * @return
      */
-    @RequestMapping("/findPage")
-    public PageResult findPage(int page, int rows) {
-        return sellerService.findPage(page, rows);
-    }
+//    @RequestMapping("/findPage")
+//    public PageResult findPage(int page, int rows) {
+//        return sellerService.findPage(page, rows);
+//    }
 
     /**
      * 增加
