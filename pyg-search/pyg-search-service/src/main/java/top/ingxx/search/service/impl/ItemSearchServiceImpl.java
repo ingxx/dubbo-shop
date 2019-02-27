@@ -139,7 +139,33 @@ public class ItemSearchServiceImpl implements ItemSearchService {
                 query.addFilterQuery(filterQuery);
             }
         }
-
+        //按价格过滤
+        if (!"".equals(searchMap.get("price"))) {
+            String[] price = searchMap.get("price").toString().split("-");
+            if (!price[0].equals("0")) { //如果最低价格不等于0
+                FilterQuery filterQuery = new SimpleFilterQuery();
+                Criteria priceCriteria = new Criteria("item_price").greaterThanEqual(price[0]);
+                filterQuery.addCriteria(priceCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+            if (!price[1].equals("*")) { //如果最高价格不等于*
+                FilterQuery filterQuery = new SimpleFilterQuery();
+                Criteria priceCriteria = new Criteria("item_price").lessThanEqual(price[1]);
+                filterQuery.addCriteria(priceCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+        }
+        //分页
+        Integer pageNum = (Integer) searchMap.get("pageNum");
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+        Integer pageSize = (Integer) searchMap.get("pageSize");
+        if (pageSize == null) {
+            pageNum = 20;
+        }
+        query.setOffset((pageNum - 1) * pageSize);//起始索引
+        query.setRows(pageSize); //每页数量
         //构建高亮选项对象
         HighlightOptions highlightOptions = new HighlightOptions().addField("item_title");//高亮域
         highlightOptions.setSimplePrefix("<em style='color:red'>"); //前缀
@@ -164,6 +190,8 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 
         }
         map.put("rows", page.getContent());
+        map.put("totalPages", page.getTotalPages());//总页数
+        map.put("total", page.getTotalElements());//总条数
         return map;
     }
 
