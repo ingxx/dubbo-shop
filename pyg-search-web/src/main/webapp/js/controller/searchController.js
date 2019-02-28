@@ -11,27 +11,35 @@ app.controller('searchController', function ($scope, searchService) {
     };
     //搜索方法
     $scope.search = function () {
+        $scope.searchMap.pageNum = parseInt($scope.searchMap.pageNum);
         searchService.search($scope.searchMap).success(
             function (response) {
                 $scope.resultMap = response;
-
                 builPageLable();//构建分页栏
             }
         )
     };
+    //构建分页栏
     builPageLable = function () {
         $scope.pageLabel = [];
         var firstPage = 1; //开始页
         var lastPage = $scope.resultMap.totalPages; //截至页码
+        $scope.firstDot = true;
+        $scope.lastDot = true;
         if ($scope.resultMap.totalPages > 5) { //如果总页数大于5
             if ($scope.searchMap.pageNum <= 3) { //如果当前页码小于3显示前5页
                 lastPage = 5;
+                $scope.firstDot = false;
             } else if ($scope.searchMap.pageNum >= $scope.resultMap.totalPages - 2) {
                 firstPage = $scope.resultMap.totalPages - 4;
+                $scope.lastDot = false;
             } else {
                 firstPage = $scope.searchMap.pageNum - 2;
                 lastPage = $scope.searchMap.pageNum + 2;
             }
+        } else {
+            $scope.firstDot = false;
+            $scope.lastDot = false;
         }
         for (var i = firstPage; i <= lastPage; i++) {
             $scope.pageLabel.push(i);
@@ -56,10 +64,31 @@ app.controller('searchController', function ($scope, searchService) {
         }
         $scope.search();
     }
-
+    //分页搜索
     $scope.queryByPage = function (pageNum) {
+        if (pageNum < 1 || pageNum > $scope.resultMap.totalPages) {
+            return;
+        }
         $scope.searchMap.pageNum = pageNum;
         $scope.search();
+    }
+
+    //判断是否是第一页
+    $scope.isTopPage = function () {
+        if ($scope.searchMap.pageNum == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //判断是否是最后一页
+    $scope.isEndPage = function () {
+        if ($scope.resultMap.totalPages == $scope.searchMap.pageNum) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 })
