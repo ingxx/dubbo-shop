@@ -1,5 +1,6 @@
 package top.ingxx.manager.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,7 +10,9 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import top.ingxx.pojo.TbGoods;
 import top.ingxx.manager.service.GoodsService;
 
+import top.ingxx.pojo.TbItem;
 import top.ingxx.pojoGroup.Goods;
+import top.ingxx.search.service.ItemSearchService;
 import top.ingxx.untils.entity.PageResult;
 import top.ingxx.untils.entity.PygResult;
 
@@ -25,6 +28,8 @@ public class GoodsController {
     @Reference
     private GoodsService goodsService;
 
+    @Reference(timeout = 10000)
+    private ItemSearchService itemSearchService;
     /**
      * 返回全部列表
      *
@@ -100,6 +105,7 @@ public class GoodsController {
     public PygResult delete(Long[] ids) {
         try {
             goodsService.delete(ids);
+            itemSearchService.deleteByGoodsIds(Arrays.asList(ids));
             return new PygResult(true, "删除成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -120,10 +126,20 @@ public class GoodsController {
         return goodsService.findPage(goods, page, rows);
     }
 
+    /**
+     * 商品审核
+     * @param ids
+     * @param status
+     * @return
+     */
     @RequestMapping("/updateStatus")
     public PygResult updateStatus(Long[] ids, String status) {
         try {
             goodsService.updateStatus(ids, status);
+            if("1".equals(status)){//如审核通过
+                List<TbItem> itemList = goodsService.findItemListByGoodsIdListAndStatus(ids, status);
+                itemSearchService.importList(itemList);
+            }
             return new PygResult(true,"审核成功");
         }catch (Exception e){
             e.printStackTrace();

@@ -1,5 +1,7 @@
 package top.ingxx.manager.service.impl;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -227,5 +229,15 @@ public class GoodsServiceImpl implements GoodsService {
             goodsMapper.updateByPrimaryKey(goods);
         }
     }
+
+    public List<TbItem> findItemListByGoodsIdListAndStatus(Long []goodsIds,String status){
+        TbItemExample example = new TbItemExample();
+        TbItemExample.Criteria criteria = example.createCriteria();
+        criteria.andStatusEqualTo(status);
+        criteria.andGoodsIdIn(Arrays.asList(goodsIds));
+        return itemMapper.selectByExample(example);
+    }
+
+
 
 }

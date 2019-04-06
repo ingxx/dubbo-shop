@@ -4,6 +4,7 @@ import java.util.List;
 
 import top.ingxx.pojo.TbGoods;
 
+import top.ingxx.pojo.TbItem;
 import top.ingxx.pojoGroup.Goods;
 import top.ingxx.untils.entity.PageResult;
 
@@ -74,4 +75,13 @@ public interface GoodsService {
      * @param status 状态
      */
     public void updateStatus(Long[] ids,String status);
+
+
+    /**
+     * 根据spu 查询sku
+     * @param goodsIds
+     * @param status
+     * @return
+     */
+    public List<TbItem> findItemListByGoodsIdListAndStatus(Long []goodsIds, String status);
 }

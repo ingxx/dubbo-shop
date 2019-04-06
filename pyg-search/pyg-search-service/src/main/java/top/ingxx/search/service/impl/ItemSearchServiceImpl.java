@@ -7,17 +7,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.solr.core.SolrTemplate;
-import org.springframework.data.solr.core.query.Criteria;
-import org.springframework.data.solr.core.query.FilterQuery;
-import org.springframework.data.solr.core.query.GroupOptions;
-import org.springframework.data.solr.core.query.HighlightOptions;
-import org.springframework.data.solr.core.query.HighlightQuery;
-import org.springframework.data.solr.core.query.Query;
-import org.springframework.data.solr.core.query.SimpleFilterQuery;
-import org.springframework.data.solr.core.query.SimpleHighlightQuery;
-import org.springframework.data.solr.core.query.SimpleQuery;
+import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.GroupEntry;
 import org.springframework.data.solr.core.query.result.GroupPage;
 import org.springframework.data.solr.core.query.result.GroupResult;
@@ -81,6 +74,8 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 //        map.put("rows", page.getContent());
 //        return map;
         Map map = new HashMap();
+        String keywords = (String) searchMap.get("keywords"); //去掉空格
+        searchMap.put("keywords", keywords.replace(" ", ""));
         //查询列表
         map.putAll(searchList(searchMap));
         //查询商品分类
@@ -166,6 +161,20 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         }
         query.setOffset((pageNum - 1) * pageSize);//起始索引
         query.setRows(pageSize); //每页数量
+
+        //按价格排序
+        String sortValue = searchMap.get("sort").toString(); //升序asc 降序desc
+        String sortField = searchMap.get("sortField").toString(); //排序字段
+        Sort sort = null;
+        if (sortValue != null && !sortValue.equals("")) {
+            if (sortValue.equals("ASC")) {
+                sort = new Sort(Sort.Direction.ASC, "item_" + sortField);
+            } else if (sortValue.equals("DESC")) {
+                sort = new Sort(Sort.Direction.DESC, "item_" + sortField);
+            }
+        }
+        query.addSort(sort);
+
         //构建高亮选项对象
         HighlightOptions highlightOptions = new HighlightOptions().addField("item_title");//高亮域
         highlightOptions.setSimplePrefix("<em style='color:red'>"); //前缀
@@ -244,6 +253,23 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             map.put("specList", specList);
         }
         return map;
+    }
+
+    /**
+     * 增量添加
+     * @param list
+     */
+    public void importList(List list){
+        solrTemplate.saveBeans(list);
+        solrTemplate.commit();
+    }
+
+    public void deleteByGoodsIds(List goodsIds){
+        SolrDataQuery query = new SimpleQuery("*:*");
+        Criteria criteria = new Criteria("item_goodsid").in(goodsIds);
+        query.addCriteria(criteria);
+        solrTemplate.delete(query);
+        solrTemplate.commit();
     }
 
 }

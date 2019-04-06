@@ -1,4 +1,4 @@
-app.controller('searchController', function ($scope, searchService) {
+app.controller('searchController', function ($scope, searchService,$location) {
 
     $scope.searchMap = {
         'keywords': '',
@@ -7,7 +7,9 @@ app.controller('searchController', function ($scope, searchService) {
         'spec': {},
         'price': '',
         'pageNum': 1,
-        'pageSize': 40
+        'pageSize': 40,
+        'sort':'',
+        'sortField':''
     };
     //搜索方法
     $scope.search = function () {
@@ -90,5 +92,23 @@ app.controller('searchController', function ($scope, searchService) {
             return false;
         }
     }
+    //排序查询
+    $scope.sortSearch = function (sortField,sort) {
+        $scope.searchMap.sortField = sortField;
+        $scope.searchMap.sort = sort;
+        $scope.search();
+    }
 
+    $scope.keywordsIsBrand = function () {
+        for (var i = 0; i<$scope.resultMap.brandList.length;i++){
+            if($scope.searchMap.keywords.indexOf($scope.resultMap.brandList[i].text)>=0){
+                return true;
+            }
+            return false;
+        }
+    }
+    $scope.loadkeywords = function () {
+        $scope.searchMap.keywords = $location.search()['keywords'];
+        $scope.search();
+    }
 })
