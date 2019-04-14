@@ -63,6 +63,16 @@ public class TbItem implements Serializable {
     @Field("item_seller")
     private String seller;
 
+    private String spu;
+
+    public String getSpu() {
+        return spu;
+    }
+
+    public void setSpu(String spu) {
+        this.spu = spu;
+    }
+
     public Map<String, String> getSpecMap() {
         return specMap;
     }

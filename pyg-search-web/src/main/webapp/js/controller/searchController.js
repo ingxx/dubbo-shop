@@ -111,4 +111,8 @@ app.controller('searchController', function ($scope, searchService,$location) {
         $scope.searchMap.keywords = $location.search()['keywords'];
         $scope.search();
     }
+
+    $scope.getPage = function (goodsId) {
+        location.href="http://localhost:8084/#?keywords=" + goodsId;
+    }
 })
