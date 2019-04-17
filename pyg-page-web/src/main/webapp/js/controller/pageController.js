@@ -40,14 +40,8 @@ app.controller('pageController', function ($scope, pageService,$location,$sce) {
     };
     //添加商品到购物车
     $scope.addToCart=function(){
-        alert('skuid:'+$scope.sku.id);
+        pageService.addToCart($scope.sku.id,$scope.num);
     }
-
-
-
-
-
-
 
 
     $scope.loadPage = function () {
