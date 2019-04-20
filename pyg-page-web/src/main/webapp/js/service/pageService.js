@@ -4,7 +4,12 @@ app.service('pageService', function ($http) {
         return $http.get('page/getPage?goodsId=' + goodsId);
     }
     this.addToCart = function (sku,num) {
-        alert("111");
-        return $http.get("localhost:9107/addGoodsToCartList?itemId="+sku+"&num=" + num);
+        return $http.get("http://localhost:9107/cart/addGoodsToCartList.do?itemId="+sku+"&num=" + num,{'withCredentials':true}).success(
+            function (data) {
+                if(data.success){
+                    location.href='http://localhost:9107'
+                }
+            }
+        )
     }
 })
